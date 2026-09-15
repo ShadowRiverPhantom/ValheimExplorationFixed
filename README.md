@@ -5,8 +5,6 @@ Should work fine with vanilla, not sure about other mods
 Fixed source code fork: https://github.com/ShadowRiverPhantom/ValheimExplorationFixed
 Original mod: https://github.com/blaxxun-boop/Exploration
 
-Original README below V
-
 ---
 
 # Exploration
