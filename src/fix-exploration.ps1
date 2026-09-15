@@ -30,7 +30,7 @@
     BepInEx core directory that contains Mono.Cecil.dll. Defaults to $env:BEPINEX_CORE_DIR.
 
 .EXAMPLE
-    .\fix-exploration.ps1 -SrcDll .\upstream\Exploration.dll -OutDll .\dist\Exploration.dll
+    .\fix-exploration.ps1 -SrcDll .\upstream\Exploration.dll -OutDll .\dist\ExplorationFixed.dll
 #>
 [CmdletBinding()]
 param(

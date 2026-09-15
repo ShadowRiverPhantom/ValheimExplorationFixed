@@ -35,7 +35,8 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 if (-not $OutputDir) { $OutputDir = Join-Path $root 'dist' }
-$assemblyName = 'Exploration'
+$upstreamName = 'Exploration'
+$packageName = 'ExplorationFixed'
 
 if (-not $Version) {
     $manifestPath = Join-Path $root 'manifest.json'
@@ -165,12 +166,12 @@ function Find-UpstreamDll {
 
 $valheim = Find-ValheimDir -Explicit $ValheimDir
 $bepInExCore = Find-BepInExCore -Valheim $valheim -Explicit $BepInExCoreDir
-$source = Find-UpstreamDll -Explicit $SourceDll -Name $assemblyName
+$source = Find-UpstreamDll -Explicit $SourceDll -Name $upstreamName
 
 if (-not (Test-Path $OutputDir)) { New-Item -ItemType Directory -Path $OutputDir | Out-Null }
 $outputDir = (Resolve-Path $OutputDir).Path
-$outputDll = Join-Path $outputDir "$assemblyName.dll"
-$stagedDll = Join-Path $outputDir "$assemblyName.stage1.dll"
+$outputDll = Join-Path $outputDir "$packageName.dll"
+$stagedDll = Join-Path $outputDir "$packageName.stage1.dll"
 
 Write-Host "Valheim      : $valheim"
 Write-Host "BepInEx core : $bepInExCore"
@@ -225,7 +226,7 @@ if (-not $NoPackage) {
     $packagePlugins = Join-Path $packageRoot 'BepInEx\plugins'
     New-Item -ItemType Directory -Path $packagePlugins -Force | Out-Null
 
-    Copy-Item -Path $outputDll -Destination (Join-Path $packagePlugins "$assemblyName.dll") -Force
+    Copy-Item -Path $outputDll -Destination (Join-Path $packagePlugins "$packageName.dll") -Force
     foreach ($extra in @('manifest.json', 'icon.png', 'README.md')) {
         $path = Join-Path $root $extra
         if (-not (Test-Path $path)) { continue }
@@ -240,7 +241,7 @@ if (-not $NoPackage) {
     }
 
     Add-Type -AssemblyName System.IO.Compression.FileSystem
-    $zipPath = Join-Path $outputDir "$assemblyName-$Version.zip"
+    $zipPath = Join-Path $outputDir "$packageName-$Version.zip"
     if (Test-Path $zipPath) { Remove-Item -Path $zipPath -Force }
     [System.IO.Compression.ZipFile]::CreateFromDirectory($packageRoot, $zipPath)
     Write-Host "Package: $zipPath" -ForegroundColor Green
@@ -257,7 +258,7 @@ if ($Deploy) {
     if (-not $ProfilePluginsDir) {
         Write-Warning 'Deploy skipped: no r2modman profile found, pass -ProfilePluginsDir.'
     } else {
-        $target = Join-Path $ProfilePluginsDir "kagegawa-$assemblyName"
+        $target = Join-Path $ProfilePluginsDir "kagegawa-$packageName"
         if (-not (Test-Path $target)) { New-Item -ItemType Directory -Path $target | Out-Null }
         Copy-Item -Path $outputDll -Destination $target -Force
         Write-Host "Deployed to: $target" -ForegroundColor Green

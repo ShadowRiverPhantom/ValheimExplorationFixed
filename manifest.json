@@ -1,5 +1,5 @@
 {
-    "name":  "Exploration",
+    "name":  "ExplorationFixed",
     "version_number":  "1.0.4",
     "website_url":  "https://github.com/ShadowRiverPhantom/ValheimExplorationFixed",
     "description":  "Adds a skill that increases exploration radius and movement speed. Adapted to Valheim 1.0.",
